@@ -31,7 +31,7 @@ func newErrField(err string) *Field {
 	}
 }
 
-func ConvertStruct(st interface{}) (*Field, error) {
+func Convert(st interface{}) (*Field, error) {
 	if st == nil {
 		return newNilField(), nil
 	}
@@ -94,7 +94,7 @@ func ConvertStruct(st interface{}) (*Field, error) {
 			ArrayValue: make([]*Field, num),
 		}
 		for i := 0; i < num; i++ {
-			f, err := ConvertStruct(val.Index(i).Interface())
+			f, err := Convert(val.Index(i).Interface())
 			if err != nil {
 				return newNilField(), err
 			}
@@ -110,7 +110,7 @@ func ConvertStruct(st interface{}) (*Field, error) {
 		for list.Next() {
 			k := list.Key()
 			v := list.Value()
-			f, err := ConvertStruct(v.Interface())
+			f, err := Convert(v.Interface())
 			if err != nil {
 				return newNilField(), err
 			}
@@ -129,7 +129,7 @@ func ConvertStruct(st interface{}) (*Field, error) {
 				if tagVal := typ.Field(i).Tag.Get("json"); tagVal != "" {
 					name = tagVal
 				}
-				f, err := ConvertStruct(val.Field(i).Interface())
+				f, err := Convert(val.Field(i).Interface())
 				if err != nil {
 					return newNilField(), err
 				}
@@ -439,7 +439,7 @@ func (f *Field) ByteToField() *Field {
 		if err := json.Unmarshal(b, &i); err != nil {
 			return newErrField(err.Error())
 		}
-		field, err := ConvertStruct(i)
+		field, err := Convert(i)
 		if err != nil {
 			return newErrField(err.Error())
 		}

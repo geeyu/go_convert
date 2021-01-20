@@ -55,7 +55,7 @@ func TestField(t *testing.T) {
 	oom, _ := json.Marshal(aaa)
 	ccc := map[string]json.RawMessage{"data": oom}
 
-	if ddd, err := ConvertStruct(ccc); err == nil {
+	if ddd, err := Convert(ccc); err == nil {
 		kkk := ddd.Get("data").ByteToField()
 		err = kkk.Get("int_maps").MapRange(func(s string, field *Field) error {
 			if s == "zzz" {
